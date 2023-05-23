@@ -1,0 +1,36 @@
+const title_link = document.getElementById('row');
+
+fetch("../static/news_data.json")
+  .then(res => res.json())
+  .then(data => {
+    const a = data;
+    const sortByDate = a => {
+      const sorter = (a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime(); // Sort in reverse order
+      };
+      a.sort(sorter);
+    };
+    sortByDate(a);
+
+    data.forEach(post => {
+      if (post.category == "sport") {
+        title_link.insertAdjacentHTML("beforeend", `
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <img class="card-img-top" src="${post.pic}" height="200px" width="270" alt="Card image cap">
+              <div class="card-body">
+                <p id="kaki" class="card-text">${post.title}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a id="btn" href="${post.link}" target="_blank">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">View More</button>
+                    </a>
+                  </div>
+                  <small class="text-muted">${post.date}</small>
+                </div>
+              </div>
+            </div>
+          </div>`);
+      }
+    });
+  });
